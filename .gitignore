@@ -1,0 +1,5 @@
+app
+node_modules
+renderer/.next
+.env
+package-lock.json
