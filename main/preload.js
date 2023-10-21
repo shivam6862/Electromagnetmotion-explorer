@@ -53,13 +53,15 @@ contextBridge.exposeInMainWorld("webSerialApi", {
       await port.open({ baudRate: 9600 });
       textDecoder = new TextDecoderStream();
       port.readable.pipeTo(textDecoder.writable);
-      return `vendorId: ${portInfo.usbVendorId} | productId: ${portInfo.usbProductId}`;
-    } catch (err) {
-      if (err.name === "NotFoundError") {
-        return err.message;
-      } else {
-        return "Error occurred: " + err.message;
-      }
+      return {
+        type: "Success",
+        message: `vendorId: ${portInfo.usbVendorId} | productId: ${portInfo.usbProductId}`,
+      };
+    } catch (error) {
+      return {
+        type: "Error",
+        message: "Error occurred: " + error.message,
+      };
     }
   },
   sendCharacterToSerialPort: async (sendCharacter) => {
@@ -68,9 +70,15 @@ contextBridge.exposeInMainWorld("webSerialApi", {
       const writer = port.writable.getWriter();
       await writer.write(new TextEncoder().encode(character));
       await writer.releaseLock();
-      return character;
+      return {
+        type: "Success",
+        message: character,
+      };
     } catch (error) {
-      return "Error occurred: " + error.message;
+      return {
+        type: "Error",
+        message: "Error occurred: " + error.message,
+      };
     }
   },
   readSerialPort: async () => {
@@ -83,15 +91,24 @@ contextBridge.exposeInMainWorld("webSerialApi", {
             break; // No more data to read, exit the loop
           }
           // Handle received data as needed
-          return value;
+          return {
+            type: "Success",
+            message: value,
+          };
         }
       } catch (error) {
-        console.error("Error:", error);
+        return {
+          type: "Error",
+          message: undefined,
+        };
       } finally {
         reader.releaseLock(); // Release the reader's lock when done
       }
     } else {
-      return undefined;
+      return {
+        type: "Error",
+        message: undefined,
+      };
     }
   },
 });

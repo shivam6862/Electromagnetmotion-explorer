@@ -3,11 +3,14 @@ import classes from "../styles/Header.module.css";
 import Link from "next/link";
 import Image from "next/image";
 import { BsMoonFill, BsSunFill } from "react-icons/bs";
+import { useNotification } from "../hook/useNotification";
 
 const Header = ({ href, page }) => {
+  const { NotificationHandler } = useNotification();
   const [isdark, setIsDark] = useState(true);
 
   useEffect(() => {
+    NotificationHandler(`Thank for joining us! **${page}**`, "Info");
     window.ipc.on("dark-mode:system", (response) => {
       setIsDark(response);
     });

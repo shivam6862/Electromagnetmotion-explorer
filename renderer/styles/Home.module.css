@@ -96,19 +96,19 @@
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 .data_coming_from_web_serial {
-  font-size: 1rem;
-  color: var(--white-color);
+  font-size: 1.1rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   width: -webkit-fill-available;
 }
-.data_coming_from_web_serial > p {
+.data_coming_from_web_serial > div > p {
   padding: 0;
   margin: 0;
+  color: var(--white-color);
 }
 
-.data_coming_from_web_serial > p > span {
-  color: var(--light-black-color);
+.data_coming_from_web_serial > div > p > span {
+  color: var(--green-color);
 }
