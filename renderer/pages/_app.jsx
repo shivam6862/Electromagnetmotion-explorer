@@ -8,9 +8,11 @@ import { NotificationContextProvider } from "../store/notification/Notification-
 export default function MyApp({ Component, pageProps }) {
   return (
     <NotificationContextProvider>
-      <Notifications />
-      <Component {...pageProps} className={oxanium.className} />
-      <Script />
+      <div className={oxanium.className}>
+        <Notifications />
+        <Component {...pageProps} />
+        <Script />
+      </div>
     </NotificationContextProvider>
   );
 }

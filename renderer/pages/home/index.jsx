@@ -10,6 +10,7 @@ const Home = () => {
   const [webSerialId, setWebSerialId] = useState("");
   const [readCharacter, setReadCharacter] = useState("");
   const [sendCharacter, setSendCharacter] = useState("");
+  const [isReadButtonActive, setIsReadButtonActive] = useState(true);
 
   useEffect(() => {
     window.ipc.on("message", (message) => {
@@ -32,7 +33,13 @@ const Home = () => {
     }
   };
   const handleSendCharacter = async () => {
-    if (sendCharacter == "") return;
+    if (sendCharacter == "") {
+      NotificationHandler("Please fill a character!", "Info");
+      return;
+    } else if (sendCharacter.length > 1) {
+      NotificationHandler("Fill a single character!", "Warn");
+      return;
+    }
     try {
       const response = await window.webSerialApi.sendCharacterToSerialPort(
         sendCharacter
@@ -44,28 +51,38 @@ const Home = () => {
     }
   };
   const handleReadCharacter = async () => {
+    let interval;
+    setIsReadButtonActive(false);
     try {
-      const interval = setInterval(async () => {
+      interval = setInterval(async () => {
         try {
           const response = await window.webSerialApi.readSerialPort();
-          if (response.message != undefined) setReadCharacter(response.message);
+          if (response.message !== undefined) {
+            setReadCharacter(response.message);
+          }
         } catch (error) {
           NotificationHandler(error.message, "Error");
+          clearInterval(interval);
+          setIsReadButtonActive(true);
         }
       }, 2000);
-
-      return () => {
-        clearInterval(interval);
-      };
     } catch (error) {
       NotificationHandler(error.message, "Info");
+      setIsReadButtonActive(true);
+    } finally {
+      return () => {
+        clearInterval(interval);
+        setIsReadButtonActive(true);
+      };
     }
   };
 
   return (
     <div className={classes.container}>
       <Head>
+        <link rel="icon" href="/logo.jpg" />
         <title>Home</title>
+        <meta name="Home" content="Home" />
       </Head>
       <div className={classes.box}>
         <Header href={"/explorer"} page={"Home"} />
@@ -91,9 +108,14 @@ const Home = () => {
               }}
             />
             <div className={classes.buttons}>
-              <button onClick={handleConnectSerial}>Test Web Serial API</button>
+              <button onClick={handleConnectSerial}>Web Serial API</button>
               <button onClick={handleSendCharacter}>Send character</button>
-              <button onClick={handleReadCharacter}>Read character</button>
+              <button
+                onClick={handleReadCharacter}
+                disabled={!isReadButtonActive}
+              >
+                Read character
+              </button>
             </div>
             <div className={classes.data_coming_from_web_serial}>
               <div>
@@ -101,10 +123,7 @@ const Home = () => {
                   Web Serial API keys: <span>{webSerialId}</span>
                 </p>
                 <p>
-                  Character read: <span>{readCharacter}</span>
-                </p>
-                <p>
-                  Send character: <span>{sendCharacter}</span>
+                  Message received : <span>{readCharacter}</span>
                 </p>
               </div>
             </div>
