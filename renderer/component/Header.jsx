@@ -7,22 +7,22 @@ import { useNotification } from "../hook/useNotification";
 
 const Header = ({ href, page }) => {
   const { NotificationHandler } = useNotification();
-  const [isdark, setIsDark] = useState(true);
+  const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
     NotificationHandler(`Thank for joining us! **${page}**`, "Info");
-    window.ipc.on("dark-mode:system", (response) => {
+    const deafultTheme = async () => {
+      const response = await window.darkMode.system();
       setIsDark(response);
-    });
-    return () => {
-      window.ipc.removeAllListeners("dark-mode:system");
     };
+    deafultTheme();
   }, []);
 
   const handleChangeTheme = async () => {
     const response = await window.darkMode.toggle();
     setIsDark(response);
   };
+
   return (
     <div className={classes.header}>
       <div className={classes.header_left}>
@@ -34,10 +34,10 @@ const Header = ({ href, page }) => {
           <Link href={`${href}`}>Explorer</Link>
         </div>
         <div className={classes.day_night_mode}>
-          {isdark ? (
-            <BsMoonFill color="#fff" size={25} onClick={handleChangeTheme} />
-          ) : (
+          {!isDark ? (
             <BsSunFill color="#fff" size={25} onClick={handleChangeTheme} />
+          ) : (
+            <BsMoonFill color="#fff" size={25} onClick={handleChangeTheme} />
           )}
         </div>
       </div>

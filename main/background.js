@@ -21,12 +21,13 @@ if (isProd) {
 
 // Main asynchronous function
 var mainWindow = "";
+var currentTheme = "";
 (async () => {
   // Wait until Electron app is ready
   await app.whenReady();
 
   // Create a main window with specified options
-  mainWindow = createWindow("main", {
+  const mainWindowObject = createWindow("main", {
     width: 1000,
     height: 600,
     title: "Electromagnet motion explorer",
@@ -36,6 +37,8 @@ var mainWindow = "";
       preload: path.join(__dirname, "preload.js"),
     },
   });
+  mainWindow = mainWindowObject.win;
+  currentTheme = mainWindowObject.currentTheme;
 
   // Menu
   const menu = Menu.buildFromTemplate(ownMenu);
@@ -105,13 +108,16 @@ ipcMain.on("message", async (event, arg) => {
 
 // 2. EXTRA FUNCTION FOR DARK-MODE AND LIGHT-MODE
 ipcMain.handle("dark-mode:toggle", () => {
-  nativeTheme.themeSource = nativeTheme.shouldUseDarkColors ? "light" : "dark";
-  return nativeTheme.shouldUseDarkColors;
+  const currentColor = nativeTheme.shouldUseDarkColors;
+  nativeTheme.themeSource = currentColor ? "light" : "dark";
+  currentTheme = currentColor ? "light" : "dark";
+  return currentColor ? false : true;
 });
 
 ipcMain.handle("dark-mode:system", () => {
-  nativeTheme.themeSource = "system";
-  return nativeTheme.shouldUseDarkColors;
+  if (currentTheme == undefined) nativeTheme.themeSource = "system";
+  else nativeTheme.themeSource = currentTheme;
+  return nativeTheme.themeSource == "dark" ? true : false;
 });
 
 // 3. WebUSB API

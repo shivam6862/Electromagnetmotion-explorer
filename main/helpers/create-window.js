@@ -1,5 +1,5 @@
 // Import necessary modules from Electron
-import { screen, BrowserWindow } from "electron";
+import { screen, BrowserWindow, nativeTheme } from "electron";
 
 // Import Electron Store for managing window state
 import Store from "electron-store";
@@ -8,12 +8,15 @@ import Store from "electron-store";
 export const createWindow = (windowName, options) => {
   // Define a key for storing window state in Electron Store
   const key = "window-state";
+  const theme = "window-theme";
 
   // Create a unique name for the window state store
   const name = `window-state-${windowName}`;
+  const nameTheme = `window-theme-${theme}`;
 
   // Create a new instance of Electron Store with the unique name
   const store = new Store({ name });
+  const storeTheme = new Store({ nameTheme });
 
   // Define default window size from options
   const defaultSize = {
@@ -26,6 +29,7 @@ export const createWindow = (windowName, options) => {
 
   // Function to restore window state from Electron Store
   const restore = () => store.get(key, defaultSize);
+  const restoreTheme = () => storeTheme.get(theme);
 
   // Function to get current window position and size
   const getCurrentPosition = () => {
@@ -77,10 +81,12 @@ export const createWindow = (windowName, options) => {
       Object.assign(state, getCurrentPosition());
     }
     store.set(key, state);
+    storeTheme.set(theme, nativeTheme.themeSource);
   };
 
   // Ensure window state is visible on some display and restore previous state
   state = ensureVisibleOnSomeDisplay(restore());
+  let currentTheme = restoreTheme();
 
   // Create a new BrowserWindow instance with specified options and window state
   const win = new BrowserWindow({
@@ -103,5 +109,5 @@ export const createWindow = (windowName, options) => {
   });
 
   // Return the created BrowserWindow instance
-  return win;
+  return { win, currentTheme };
 };

@@ -35,7 +35,7 @@ contextBridge.exposeInMainWorld("darkMode", {
     return response;
   },
   system: async () => {
-    await ipcRenderer.invoke("dark-mode:system");
+    return await ipcRenderer.invoke("dark-mode:system");
   },
 });
 
