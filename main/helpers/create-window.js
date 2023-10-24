@@ -97,6 +97,11 @@ export const createWindow = (windowName, options) => {
   // Listen for the 'close' event to save window state before closing
   win.on("close", saveState);
 
+  // Listen for the 'ready-to-show' event after all thing is ready
+  win.once("ready-to-show", () => {
+    win.show();
+  });
+
   // Return the created BrowserWindow instance
   return win;
 };
