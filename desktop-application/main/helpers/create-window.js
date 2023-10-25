@@ -90,8 +90,8 @@ export const createWindow = (windowName, options) => {
 
   // Create a new BrowserWindow instance with specified options and window state
   const win = new BrowserWindow({
-    ...state,
     ...options,
+    ...state,
     webPreferences: {
       // Ensure secure web preferences by disabling node integration and enabling context isolation
       nodeIntegration: false,
