@@ -7,3 +7,6 @@ desktop-application/node_modules
 desktop-application/renderer/.next
 desktop-application/.env
 desktop-application/package-lock.json
+machine-learning-models/env
+machine-learning-models/__pycache__
+machine-learning-models/uploads
