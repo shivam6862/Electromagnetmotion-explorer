@@ -10,3 +10,5 @@ desktop-application/package-lock.json
 machine-learning-models/env
 machine-learning-models/__pycache__
 machine-learning-models/uploads
+
+desktop-application/renderer/component/chart/data.json
