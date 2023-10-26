@@ -1,6 +1,7 @@
 import classes from "../../styles/Explorer.module.css";
 import Head from "next/head";
 import Header from "../../component/Header";
+import LineChart from "../../component/chart/LineChart";
 
 const Explorer = () => {
   return (
@@ -12,6 +13,7 @@ const Explorer = () => {
       </Head>
       <div className={classes.box}>
         <Header href={"/home"} page={"Explorer"} />
+        <LineChart />
       </div>
     </div>
   );
