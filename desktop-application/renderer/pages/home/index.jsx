@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import classes from "../../styles/Home.module.css";
 import Head from "next/head";
 import Header from "../../component/Header";
+import LineChart from "../../component/chart/LineChart";
 import { useNotification } from "../../hook/useNotification";
 
 const Home = () => {
@@ -105,7 +106,7 @@ const Home = () => {
         <meta name="Home" content="Home" />
       </Head>
       <div className={classes.box}>
-        <Header href={"/explorer"} page={"Home"} />
+        <Header href={"explorer"} page={"Home"} />
         <div className={classes.container_body}>
           <div className={classes.button_text}>
             <button
@@ -151,6 +152,7 @@ const Home = () => {
             </div>
           </div>
         </div>
+        <LineChart />
       </div>
     </div>
   );

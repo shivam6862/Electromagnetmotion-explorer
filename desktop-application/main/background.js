@@ -66,11 +66,11 @@ var currentTheme = "";
 
   // Load the appropriate URL based on the environment
   if (isProd) {
-    await mainWindow.loadURL("app://./home");
+    await mainWindow.loadURL("app://./explorer");
   } else {
     // In development mode, get port from command line arguments and load URL with localhost
     const port = process.argv[2];
-    await mainWindow.loadURL(`http://localhost:${port}/home`);
+    await mainWindow.loadURL(`http://localhost:${port}/explorer`);
 
     showNotification();
     // Open DevTools for debugging in development mode
@@ -212,3 +212,10 @@ function showNotification() {
     body: NOTIFICATION_BODY,
   }).show();
 }
+
+// 5. OPEN EXTERNAL LINKS
+const { shell } = require("electron");
+ipcMain.handle("externals-links:open", async (event, link) => {
+  await shell.openExternal(link);
+  return "opened!";
+});

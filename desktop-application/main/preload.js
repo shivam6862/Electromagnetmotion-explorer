@@ -149,3 +149,9 @@ contextBridge.exposeInMainWorld("workApi", {
     }
   },
 });
+
+contextBridge.exposeInMainWorld("openLinkInWeb", {
+  openLinkInWebPage: async (link) => {
+    return ipcRenderer.invoke("externals-links:open", link);
+  },
+});

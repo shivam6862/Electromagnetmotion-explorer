@@ -1,14 +1,5 @@
 .container {
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-direction: column;
-  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.5)),
-    url("/bg-amazing.webp");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  height: 100vh;
 }
 .box {
   display: flex;
@@ -41,7 +32,7 @@
   padding: 0.4rem 1rem;
   border-radius: 4px;
   color: var(--white-color);
-  background-color: var(--black-color);
+  background-color: var(--bg-primary-inside);
 }
 .button_text > button:hover {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
@@ -72,11 +63,11 @@
   all: unset;
   padding: 0.4rem 0.5rem;
   border-radius: 6px;
-  color: var(--black-color);
-  background-color: var(--light-black-color);
+  color: var(--primary-color);
+  background-color: var(--bg-primary-inside);
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   font-size: 1rem;
-  caret-color: var(--black-color);
+  caret-color: var(--primary-color);
   width: 75px;
 }
 .buttons {
@@ -93,7 +84,7 @@
   padding: 0.4rem 1rem;
   border-radius: 6px;
   color: var(--white-color);
-  background-color: var(--black-color);
+  background-color: var(--bg-primary-inside);
   box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
   white-space: nowrap;
 }
@@ -120,5 +111,5 @@
 }
 
 .data_coming_from_web_serial > div > p > span {
-  color: var(--green-color);
+  color: var(--primary-color);
 }

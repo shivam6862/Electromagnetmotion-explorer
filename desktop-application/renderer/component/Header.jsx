@@ -31,7 +31,7 @@ const Header = ({ href, page }) => {
       </div>
       <div className={classes.header_right}>
         <div className={classes.links}>
-          <Link href={`${href}`}>Explorer</Link>
+          <Link href={`/${href}`}>{href}</Link>
         </div>
         <div className={classes.day_night_mode}>
           {!isDark ? (

@@ -42,8 +42,8 @@ const LineChart = () => {
         data: chartDataState.map((data) =>
           Math.sin((data.angle * Math.PI) / 180).toString()
         ),
-        borderColor: "rgb(255, 99, 132)",
-        backgroundColor: "rgba(255, 99, 132, 0.5)",
+        borderColor: "#ff7100",
+        backgroundColor: "rgb(255, 113, 0, 0.7)",
       },
     ],
   };
