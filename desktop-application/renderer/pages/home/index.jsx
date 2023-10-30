@@ -76,6 +76,26 @@ const Home = () => {
       };
     }
   };
+  const handleStartWork = async () => {
+    try {
+      const response = await window.workApi.sendCharacterToStartWork("S");
+      console.log(response);
+      if (response.type == "Error")
+        NotificationHandler(response.message, response.type);
+    } catch (error) {
+      NotificationHandler(error.message, "Warn");
+    }
+  };
+  const handleStopWork = async () => {
+    try {
+      const response = await window.workApi.sendCharacterToEndWork("C");
+      console.log(response);
+      if (response.type == "Error")
+        NotificationHandler(response.message, response.type);
+    } catch (error) {
+      NotificationHandler(error.message, "Warn");
+    }
+  };
 
   return (
     <div className={classes.container}>
@@ -110,6 +130,8 @@ const Home = () => {
             <div className={classes.buttons}>
               <button onClick={handleConnectSerial}>Web Serial API</button>
               <button onClick={handleSendCharacter}>Send character</button>
+              <button onClick={handleStartWork}>Start work</button>
+              <button onClick={handleStopWork}>Stop work</button>
               <button
                 onClick={handleReadCharacter}
                 disabled={!isReadButtonActive}

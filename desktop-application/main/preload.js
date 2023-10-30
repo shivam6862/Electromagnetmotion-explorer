@@ -112,3 +112,40 @@ contextBridge.exposeInMainWorld("webSerialApi", {
     }
   },
 });
+
+contextBridge.exposeInMainWorld("workApi", {
+  sendCharacterToStartWork: async (sendCharacter) => {
+    const character = `${sendCharacter}\n`;
+    try {
+      const writer = port.writable.getWriter();
+      await writer.write(new TextEncoder().encode(character));
+      await writer.releaseLock();
+      return {
+        type: "Success",
+        message: character,
+      };
+    } catch (error) {
+      return {
+        type: "Error",
+        message: "Error occurred: " + error.message,
+      };
+    }
+  },
+  sendCharacterToEndWork: async (sendCharacter) => {
+    const character = `${sendCharacter}\n`;
+    try {
+      const writer = port.writable.getWriter();
+      await writer.write(new TextEncoder().encode(character));
+      await writer.releaseLock();
+      return {
+        type: "Success",
+        message: character,
+      };
+    } catch (error) {
+      return {
+        type: "Error",
+        message: "Error occurred: " + error.message,
+      };
+    }
+  },
+});
