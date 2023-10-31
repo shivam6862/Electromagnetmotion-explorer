@@ -6,50 +6,96 @@
   width: -webkit-fill-available;
   gap: 1rem;
   padding: 0.5rem 0.25rem;
+  background-color: var(--bg-primary-inside);
 }
 .header_left {
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
-  flex-direction: row;
-  gap: 1rem;
+  gap: 5rem;
 }
-.header_left > h1 {
+.header_left_first {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
+}
+.header_left_first > img {
+  width: var(--ft-900);
+  height: var(--ft-900);
+  border-radius: 50%;
+}
+.header_left_first_text {
+  display: flex;
+  flex-direction: column;
+  color: var(--white-color);
+  font-size: var(--ft-350);
+}
+.header_left_second > p {
+  padding: 0;
+  margin: 0;
+  color: var(--border-color);
+  font-size: var(--ft-400);
+  font-weight: 400;
+  text-align: center;
+}
+.header_left_second > h1 {
   padding: 0;
   margin: 0;
   color: var(--white-color);
   font-weight: 500;
-  font-size: 1.5rem;
-}
-.header_left > img {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  font-size: var(--ft-450);
+  font-style: normal;
+  line-height: normal;
 }
 .header_right {
-  font-size: 1rem;
+  font-size: var(--ft-400);
   padding-right: 0.5rem;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: row;
-  gap: 1rem;
+  gap: 2rem;
+}
+.date_time > p {
+  padding: 0;
+  margin: 0;
+  color: var(--border-color);
+  font-size: var(--ft-400);
+  font-weight: 400;
+  text-align: right;
+}
+.date_time > h2 {
+  padding: 0;
+  margin: 0;
+  color: var(--white-color);
+  font-weight: 500;
+  font-size: var(--ft-300);
+  font-style: normal;
+  line-height: normal;
 }
 .links > a {
   all: unset;
   cursor: pointer;
   padding: 0.2rem 0.5rem;
-  border-radius: 4px;
+  border-radius: 1px;
   color: var(--white-color);
-  background-color: var(--light-black-color);
-  border: 1px solid var(--black-color);
+  border: 1px solid var(--border-color);
+  background: var(--bg-primary);
   text-transform: capitalize;
 }
 .links > a:hover {
   scale: 1.05;
   color: var(--light-black-color);
-  background-color: var(--white-color);
+  background-color: var(--paragraph);
 }
 .day_night_mode {
   cursor: pointer;
+}
+.header_right > img {
+  width: var(--ft-800);
+  height: var(--ft-800);
+  border-radius: 6px;
 }

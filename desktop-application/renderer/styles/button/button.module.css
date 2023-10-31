@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  cursor: pointer;
+}
+.container > button {
+  all: unset;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: var(--bg-primary-inside);
+  padding: 0.5rem 1rem;
+  border-radius: var(--ft-300);
+  flex: 2;
+  gap: 1rem;
+  width: 200px;
+  height: 55px;
+}
+.icon {
+  display: flex;
+  background-color: var(--bg-primary);
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+.icon > svg {
+  color: var(--white-color);
+  font-size: var(--ft-500);
+  color: var(--primary-color);
+}
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.details > p {
+  padding: 0;
+  margin: 0;
+  color: var(--border-color);
+  font-size: var(--ft-400);
+  font-weight: 400;
+  text-align: center;
+}
+.details > h2 {
+  padding: 0;
+  margin: 0;
+  color: var(--white-color);
+  font-weight: 500;
+  font-size: var(--ft-700);
+  font-style: normal;
+  line-height: normal;
+}
+.container > button:disabled {
+  background-color: #dddddd;
+  color: #666666;
+  cursor: not-allowed;
+}
+.container > button:disabled .details > h2 {
+  color: var(--bg-primary-inside);
+}
+.container > button:disabled .details > p {
+  color: var(--bg-primary-inside);
+}

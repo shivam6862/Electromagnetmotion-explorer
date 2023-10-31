@@ -1,5 +1,7 @@
 .container {
   display: flex;
+  flex-direction: column;
+  position: relative;
 }
 .box {
   display: flex;
@@ -8,108 +10,59 @@
   gap: 2rem;
   width: -webkit-fill-available;
   align-items: flex-start;
+  padding: 1rem 2rem;
 }
-.container_body {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: -webkit-fill-available;
-  height: 80vh;
-  gap: 1rem;
-}
-.button_text {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: -webkit-fill-available;
-  gap: 1rem;
-}
-.button_text > button {
-  all: unset;
-  cursor: pointer;
-  padding: 0.4rem 1rem;
-  border-radius: 4px;
-  color: var(--white-color);
-  background-color: var(--bg-primary-inside);
-}
-.button_text > button:hover {
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-}
-.button_text > p {
-  padding: 0;
-  margin: 0;
-  color: var(--white-color);
-  font-size: 1.2rem;
-}
-.input_area {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: -webkit-fill-available;
-  gap: 1rem;
-}
-.input_area > h2 {
-  padding: 0;
-  margin: 0;
-  font-size: 1.5rem;
-  color: var(--white-color);
-}
-.input_area > input {
-  all: unset;
-  padding: 0.4rem 0.5rem;
-  border-radius: 6px;
-  color: var(--primary-color);
-  background-color: var(--bg-primary-inside);
-  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  font-size: 1rem;
-  caret-color: var(--primary-color);
-  width: 75px;
-}
-.buttons {
+.line_chart {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  width: -webkit-fill-available;
   gap: 1rem;
 }
-.buttons > button {
-  all: unset;
-  cursor: pointer;
-  padding: 0.4rem 1rem;
-  border-radius: 6px;
-  color: var(--white-color);
-  background-color: var(--bg-primary-inside);
-  box-shadow: rgba(99, 99, 99, 0.1) 0px 2px 8px 0px;
-  white-space: nowrap;
-}
-.buttons > button:hover {
-  box-shadow: rgba(99, 99, 99, 0.5) 0px 2px 8px 0px;
-}
-.buttons > button:disabled {
-  background-color: #dddddd;
-  color: #666666;
-  cursor: not-allowed;
-}
-.data_coming_from_web_serial {
-  font-size: 1.1rem;
+.input_area {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   width: -webkit-fill-available;
 }
-.data_coming_from_web_serial > div > p {
+.input_area > input {
+  all: unset;
+  padding: 0.75rem 1rem;
+  border-radius: 6px;
+  color: var(--primary-color);
+  background-color: var(--bg-primary-inside);
+  font-size: 1rem;
+  caret-color: var(--primary-color);
+  width: 90%;
+}
+.images_from_ml {
+  display: flex;
+  flex-direction: row;
+  width: -webkit-fill-available;
+  gap: 1rem;
+}
+.image_from_ml {
+  width: 33%;
+  height: 320px;
+  border-radius: var(--ft-300);
+  background: var(--bg-primary-inside);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.image_from_ml > img {
+  width: 94%;
+  height: 90%;
+  border-radius: 8px;
+  object-fit: cover;
+}
+.box > p {
   padding: 0;
   margin: 0;
   color: var(--white-color);
-}
-
-.data_coming_from_web_serial > div > p > span {
-  color: var(--primary-color);
+  font-size: 1rem;
+  position: absolute;
+  bottom: 0;
+  right: 0;
 }

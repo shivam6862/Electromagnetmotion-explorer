@@ -1,0 +1,14 @@
+.container {
+  display: flex;
+  width: -webkit-fill-available;
+  padding: 1rem;
+}
+.box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: -webkit-fill-available;
+  flex-wrap: wrap;
+  gap: 1rem;
+}

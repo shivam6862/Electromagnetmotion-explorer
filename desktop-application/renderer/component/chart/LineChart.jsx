@@ -12,13 +12,14 @@ ChartJS.register(
   Legend
 );
 import chartData from "./data.json";
-var index = 0;
 
 const LineChart = () => {
+  var index = 0;
   const [chartDataState, setChartDataState] = useState([]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
+      if (index > chartData.length) return;
       if (index == chartData.length) {
         clearInterval(intervalId);
         index = 0;
@@ -43,7 +44,9 @@ const LineChart = () => {
           Math.sin((data.angle * Math.PI) / 180).toString()
         ),
         borderColor: "#ff7100",
-        backgroundColor: "rgb(255, 113, 0, 0.7)",
+        backgroundColor: "rgb(255, 113, 0, 0.3)",
+        borderWidth: 1.5,
+        pointRadius: 1.5,
       },
     ],
   };
@@ -67,6 +70,9 @@ const LineChart = () => {
         type: "linear",
         min: 1,
         max: 1000,
+        grid: {
+          color: "#ff7100",
+        },
         title: {
           display: true,
           text: "Time In Millisec",
@@ -76,6 +82,9 @@ const LineChart = () => {
         type: "linear",
         min: -1.5,
         max: 1.5,
+        grid: {
+          color: "#ff7100",
+        },
         title: {
           display: true,
           text: "Sin value (angle in degree)",
@@ -87,11 +96,14 @@ const LineChart = () => {
   return (
     <div
       style={{
-        height: "80vh",
-        width: "100vw",
+        height: "300px",
+        width: "50%",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        backgroundColor: "#1A1C22",
+        borderRadius: "20px",
+        padding: "0.5rem",
       }}
     >
       <Line data={data} options={options} />
