@@ -8,7 +8,6 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
   background-color: var(--bg-primary-inside);
   padding: 0.5rem 1rem;
   border-radius: var(--ft-300);
@@ -50,6 +49,11 @@
   font-size: var(--ft-700);
   font-style: normal;
   line-height: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 145px;
+  text-align: center;
 }
 .container > button:disabled {
   background-color: #dddddd;

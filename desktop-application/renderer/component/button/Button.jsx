@@ -9,7 +9,9 @@ const Button = ({ heading, icon, dataShow, onClick, disabled }) => {
         <div className={classes.icon}>{icon}</div>
         <div className={classes.details}>
           <p>{heading}</p>
-          <h2>{dataShow}</h2>
+          <h2 style={{ fontSize: dataShow?.length > 20 ? "8px" : "inherit" }}>
+            {dataShow}
+          </h2>
         </div>
       </button>
     </div>

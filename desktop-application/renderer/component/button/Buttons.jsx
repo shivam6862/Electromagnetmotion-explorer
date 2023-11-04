@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from "./Button";
 import { PiPlugsConnectedBold } from "react-icons/pi";
 import {
@@ -7,14 +7,18 @@ import {
   BsSignStopFill,
 } from "react-icons/bs";
 import { AiFillRead } from "react-icons/ai";
+import { IoStopwatchOutline } from "react-icons/io5";
 import classes from "../../styles/button/buttons.module.css";
 import { useNotification } from "../../hook/useNotification";
+import socketIoClient from "socket.io-client";
+let interval;
 
 const Buttons = ({ sendCharacter }) => {
   const { NotificationHandler } = useNotification();
   const [webSerialId, setWebSerialId] = useState("NO");
   const [readCharacter, setReadCharacter] = useState("R");
   const [isReadButtonActive, setIsReadButtonActive] = useState(true);
+  const [allvalueOfAngle, setallvalueOfAngle] = useState([]);
 
   const BUTTONS = [
     "Web Serial API",
@@ -22,6 +26,7 @@ const Buttons = ({ sendCharacter }) => {
     "Start work",
     "Stop work",
     "Read character",
+    "Stop Reading",
   ];
   const ICONS = [
     <PiPlugsConnectedBold />,
@@ -29,6 +34,7 @@ const Buttons = ({ sendCharacter }) => {
     <BsFillSkipStartCircleFill />,
     <BsSignStopFill />,
     <AiFillRead />,
+    <IoStopwatchOutline />,
   ];
   const handleConnectSerial = async () => {
     try {
@@ -82,15 +88,17 @@ const Buttons = ({ sendCharacter }) => {
       );
     }
   };
+
   const handleReadCharacter = async () => {
-    let interval;
     setIsReadButtonActive(false);
     try {
       interval = setInterval(async () => {
         try {
           const response = await window.webSerialApi.readSerialPort();
+          console.log(response);
           if (response.message !== undefined) {
             setReadCharacter(response.message);
+            setallvalueOfAngle((prev) => [...prev, response.message]);
           }
         } catch (error) {
           NotificationHandler(
@@ -101,7 +109,7 @@ const Buttons = ({ sendCharacter }) => {
           clearInterval(interval);
           setIsReadButtonActive(true);
         }
-      }, 2000);
+      }, 10);
     } catch (error) {
       NotificationHandler(
         "ElectroMagnetMotion Explorer",
@@ -116,6 +124,12 @@ const Buttons = ({ sendCharacter }) => {
       };
     }
   };
+  const handleStopReadCharacter = async () => {
+    console.log(allvalueOfAngle);
+    clearInterval(interval);
+    setIsReadButtonActive(true);
+  };
+
   const handleStartWork = async () => {
     try {
       const response = await window.workApi.sendCharacterToStartWork("S");
@@ -153,6 +167,23 @@ const Buttons = ({ sendCharacter }) => {
     }
   };
 
+  const [socket, setSocket] = useState(null);
+  useEffect(() => {
+    const establishSocketConnection = async () => {
+      const socket = socketIoClient(`http://127.0.0.1:8000`, {});
+      console.log(socket);
+      setSocket(socket);
+      socket.emit("serialData", "value");
+      socket.on("messagesForYou", (response) => {
+        console.log(response);
+      });
+      socket.on("messagesUpdated", (response) => {
+        console.log(response);
+      });
+    };
+    establishSocketConnection();
+  }, []);
+
   return (
     <div className={classes.container}>
       <div className={classes.box}>
@@ -186,6 +217,13 @@ const Buttons = ({ sendCharacter }) => {
           dataShow={readCharacter}
           onClick={handleReadCharacter}
           disabled={!isReadButtonActive}
+        />
+        <Button
+          heading={BUTTONS[5]}
+          icon={ICONS[5]}
+          dataShow={""}
+          onClick={handleStopReadCharacter}
+          disabled={isReadButtonActive}
         />
       </div>
     </div>
