@@ -7,7 +7,7 @@ import NotificationContext from "../../store/notification/Notification-context";
 const Notifications = () => {
   const notificationsCtx = useContext(NotificationContext);
   return (
-    <div className={`${classes.container} ${classes.buttomright_1}`}>
+    <div className={`${classes.container}`}>
       {notificationsCtx.typeMessage.map((message) => (
         <Notification {...message} key={message.id} />
       ))}

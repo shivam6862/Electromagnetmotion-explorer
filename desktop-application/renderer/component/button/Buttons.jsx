@@ -35,17 +35,33 @@ const Buttons = ({ sendCharacter }) => {
       const response = await window.webSerialApi.requestSerialPort();
       if (response.type == "Success") setWebSerialId(response.message);
       else if (response.type == "Error")
-        NotificationHandler(response.message, response.type);
+        NotificationHandler(
+          "ElectroMagnetMotion Explorer",
+          response.message,
+          response.type
+        );
     } catch (error) {
-      NotificationHandler(error.message, "Warn");
+      NotificationHandler(
+        "ElectroMagnetMotion Explorer",
+        error.message,
+        "Warn"
+      );
     }
   };
   const handleSendCharacter = async () => {
     if (sendCharacter == "") {
-      NotificationHandler("Please fill a character!", "Info");
+      NotificationHandler(
+        "ElectroMagnetMotion Explorer",
+        "Please fill a character!",
+        "Info"
+      );
       return;
     } else if (sendCharacter.length > 1) {
-      NotificationHandler("Fill a single character!", "Warn");
+      NotificationHandler(
+        "ElectroMagnetMotion Explorer",
+        "Fill a single character!",
+        "Warn"
+      );
       return;
     }
     try {
@@ -53,9 +69,17 @@ const Buttons = ({ sendCharacter }) => {
         sendCharacter
       );
       if (response.type == "Error")
-        NotificationHandler(response.message, response.type);
+        NotificationHandler(
+          "ElectroMagnetMotion Explorer",
+          response.message,
+          response.type
+        );
     } catch (error) {
-      NotificationHandler(error.message, "Warn");
+      NotificationHandler(
+        "ElectroMagnetMotion Explorer",
+        error.message,
+        "Warn"
+      );
     }
   };
   const handleReadCharacter = async () => {
@@ -69,13 +93,21 @@ const Buttons = ({ sendCharacter }) => {
             setReadCharacter(response.message);
           }
         } catch (error) {
-          NotificationHandler(error.message, "Error");
+          NotificationHandler(
+            "ElectroMagnetMotion Explorer",
+            error.message,
+            "Error"
+          );
           clearInterval(interval);
           setIsReadButtonActive(true);
         }
       }, 2000);
     } catch (error) {
-      NotificationHandler(error.message, "Info");
+      NotificationHandler(
+        "ElectroMagnetMotion Explorer",
+        error.message,
+        "Info"
+      );
       setIsReadButtonActive(true);
     } finally {
       return () => {
@@ -89,9 +121,17 @@ const Buttons = ({ sendCharacter }) => {
       const response = await window.workApi.sendCharacterToStartWork("S");
       console.log(response);
       if (response.type == "Error")
-        NotificationHandler(response.message, response.type);
+        NotificationHandler(
+          "ElectroMagnetMotion Explorer",
+          response.message,
+          response.type
+        );
     } catch (error) {
-      NotificationHandler(error.message, "Warn");
+      NotificationHandler(
+        "ElectroMagnetMotion Explorer",
+        error.message,
+        "Warn"
+      );
     }
   };
   const handleStopWork = async () => {
@@ -99,9 +139,17 @@ const Buttons = ({ sendCharacter }) => {
       const response = await window.workApi.sendCharacterToEndWork("C");
       console.log(response);
       if (response.type == "Error")
-        NotificationHandler(response.message, response.type);
+        NotificationHandler(
+          "ElectroMagnetMotion Explorer",
+          response.message,
+          response.type
+        );
     } catch (error) {
-      NotificationHandler(error.message, "Warn");
+      NotificationHandler(
+        "ElectroMagnetMotion Explorer",
+        error.message,
+        "Warn"
+      );
     }
   };
 

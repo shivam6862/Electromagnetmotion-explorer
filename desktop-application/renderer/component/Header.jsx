@@ -12,7 +12,7 @@ const Header = ({ href, page }) => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
-    NotificationHandler(`Thank for joining us! **${page}**`, "Info");
+    NotificationHandler("Thanks!", `Thank for joining us! **${page}**`, "Info");
     const deafultTheme = async () => {
       const response = await window.darkMode.system();
       setIsDark(response);

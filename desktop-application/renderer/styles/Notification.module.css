@@ -1,45 +1,80 @@
 .container {
   position: fixed;
   z-index: 200;
-}
-.buttomright_1 {
   bottom: -0.5rem;
   right: 0.1rem;
 }
-
 .notification {
   margin-bottom: 1rem;
-  border-radius: 6px;
   box-shadow: 0 0 10px #999;
-  color: var(--black-color);
   opacity: 0.9;
   transition: 0.3s ease;
   padding: 20px 0px 0px 0px;
-}
-.buttomright {
   animation: toast-in-right 0.7s;
+  display: flex;
+  flex-direction: column;
+  border-radius: 0.75rem;
+  min-width: 300px;
 }
-.notification > button {
-  float: right;
-  background: none;
-  border: none;
+.box {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem;
+}
+.logo {
+  background: rgb(68, 70, 84, 0.5);
+  height: 22px;
+  width: 22px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+}
+.logo > svg {
   color: var(--white-color);
+}
+.content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0.3rem;
+  max-width: 250px;
+}
+.content > h1 {
+  padding: 0;
+  margin: 0;
+  color: var(--white-color);
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+.content > p {
+  padding: 0;
+  margin: 0;
+  color: var(--white-color);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 400;
+  word-break: break-all;
+}
+.buttons {
+  padding: 2px;
+}
+.buttons > button {
+  all: unset;
   opacity: 0.8;
   cursor: pointer;
-  font-size: 1.1rem;
-  padding-right: 0.25rem;
 }
-.title {
-  font-weight: 500;
-  font-size: 1rem;
-  text-align: left;
-  margin-top: 0;
-  padding-left: 1rem;
-  margin-bottom: 6px;
-  width: 300px;
-  min-height: 18px;
+.buttons > button > svg {
+  color: var(--white-color);
 }
-.lowerboder {
+.buttons > button:hover {
+  scale: 1.1;
+}
+.lowerProgressbar {
   padding: 6px 0px;
   background: var(--white-color);
   cursor: pointer;

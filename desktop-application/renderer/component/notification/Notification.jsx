@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import classes from "../../styles/Notification.module.css";
 import NotificationContext from "../../store/notification/Notification-context";
+import { RxCross1 } from "react-icons/rx";
 
 const Notification = (props) => {
   const notifictionCtx = useContext(NotificationContext);
@@ -43,15 +44,23 @@ const Notification = (props) => {
       onMouseEnter={handlePauseTimer}
       onMouseLeave={handleStartTimer}
       key={props.id}
-      className={`${classes.notification} ${classes.buttomright}`}
-      style={{ backgroundColor: props.type }}
+      className={`${classes.notification}`}
+      style={{ background: props.type }}
     >
-      <button onClick={() => deleteNotification(props.id)}>X</button>
-      <div>
-        <p className={classes.title}>{props.message}</p>
+      <div className={classes.box}>
+        <div className={classes.logo}>{props.logo}</div>
+        <div className={classes.content}>
+          <h1>{props.title}</h1>
+          <p>{props.message}</p>
+        </div>
+        <div className={classes.buttons}>
+          <button onClick={() => deleteNotification(props.id)}>
+            <RxCross1 />
+          </button>
+        </div>
       </div>
       <div
-        className={`${classes.lowerboder}`}
+        className={`${classes.lowerProgressbar}`}
         style={{ width: width + "%" }}
       ></div>
     </div>
