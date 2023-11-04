@@ -22,7 +22,8 @@ def home():
 @app.route('/generateimage', methods=['POST'])
 def generateimage():
     try:
-        dataset = request.form.get('dataset')
+        dataset = request.json.get('dataset')
+        print(dataset)
 
         if not dataset:
             return jsonify({"error": "Missing dataset or file"}), 400

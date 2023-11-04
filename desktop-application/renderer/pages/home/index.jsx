@@ -11,6 +11,7 @@ import { SiSpeedtest } from "react-icons/si";
 const Home = () => {
   const [message, setMessage] = useState("Hii, Shivam kumar!");
   const [sendCharacter, setSendCharacter] = useState("");
+  const [chartDataState, setChartDataState] = useState([]);
 
   useEffect(() => {
     window.ipc.on("message", (message) => {
@@ -41,10 +42,14 @@ const Home = () => {
             }}
           />
         </div>
-        <Buttons sendCharacter={sendCharacter} />
+        <Buttons
+          sendCharacter={sendCharacter}
+          chartDataState={chartDataState}
+          setChartDataState={setChartDataState}
+        />
         <div className={classes.line_chart}>
-          <LineChart />
-          <LineChart />
+          <LineChart chartDataState={chartDataState} />
+          <LineChart chartDataState={chartDataState} />
         </div>
         <div className={classes.images_from_ml}>
           <div className={classes.image_from_ml}>

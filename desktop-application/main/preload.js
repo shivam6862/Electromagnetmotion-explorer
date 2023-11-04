@@ -91,7 +91,6 @@ contextBridge.exposeInMainWorld("webSerialApi", {
             break; // No more data to read, exit the loop
           }
           // Handle received data as needed
-          console.log("backend ", value);
           return {
             type: "Success",
             message: value,

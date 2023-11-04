@@ -14,11 +14,11 @@
 }
 .line_chart {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: space-between;
   width: -webkit-fill-available;
-  gap: 1rem;
+  gap: 2rem;
 }
 .input_area {
   display: flex;

@@ -11,14 +11,16 @@ import { IoStopwatchOutline } from "react-icons/io5";
 import classes from "../../styles/button/buttons.module.css";
 import { useNotification } from "../../hook/useNotification";
 import socketIoClient from "socket.io-client";
+import usePYModels from "../../hook/usePYModels";
+
 let interval;
 
-const Buttons = ({ sendCharacter }) => {
+const Buttons = ({ sendCharacter, chartDataState, setChartDataState }) => {
+  const { generateImage } = usePYModels();
   const { NotificationHandler } = useNotification();
   const [webSerialId, setWebSerialId] = useState("NO");
   const [readCharacter, setReadCharacter] = useState("R");
   const [isReadButtonActive, setIsReadButtonActive] = useState(true);
-  const [allvalueOfAngle, setallvalueOfAngle] = useState([]);
 
   const BUTTONS = [
     "Web Serial API",
@@ -91,14 +93,51 @@ const Buttons = ({ sendCharacter }) => {
 
   const handleReadCharacter = async () => {
     setIsReadButtonActive(false);
+    const globalTimeInMilliseconds = new Date().getTime();
     try {
       interval = setInterval(async () => {
         try {
           const response = await window.webSerialApi.readSerialPort();
-          console.log(response);
           if (response.message !== undefined) {
+            const message = response.message;
+            const values = message.split(",");
+            var validAngles = [];
+            var angleObjects = [];
+            values.map((value, index) => {
+              const floatValue = parseFloat(value);
+              if (!isNaN(floatValue) && floatValue >= -90 && floatValue <= 90) {
+                const decimalCount = value.split(".")[1]
+                  ? value.split(".")[1].length
+                  : 0;
+                if (decimalCount === 2) {
+                  validAngles.push(floatValue);
+                  const currentTimeInMilliseconds = new Date().getTime();
+                  const currentTimestamp =
+                    currentTimeInMilliseconds - globalTimeInMilliseconds;
+                  if (
+                    angleObjects.length > 0 &&
+                    chartDataState.length > 0 &&
+                    angleObjects[angleObjects.length - 1].angle != floatValue &&
+                    chartDataState[chartDataState.length - 1].angle !=
+                      floatValue
+                  ) {
+                    angleObjects.push({
+                      angle: floatValue,
+                      timeInMillisec: currentTimestamp,
+                    });
+                  }
+                  if (angleObjects.length == 0) {
+                    angleObjects.push({
+                      angle: floatValue,
+                      timeInMillisec: currentTimestamp,
+                    });
+                  }
+                }
+              }
+            });
             setReadCharacter(response.message);
-            setallvalueOfAngle((prev) => [...prev, response.message]);
+            console.log(angleObjects);
+            setChartDataState((prev) => [...prev, ...angleObjects]);
           }
         } catch (error) {
           NotificationHandler(
@@ -125,8 +164,9 @@ const Buttons = ({ sendCharacter }) => {
     }
   };
   const handleStopReadCharacter = async () => {
-    console.log(allvalueOfAngle);
     clearInterval(interval);
+    generateImage(chartDataState);
+    console.log(chartDataState);
     setIsReadButtonActive(true);
   };
 
