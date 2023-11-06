@@ -32,7 +32,7 @@ def generateimage():
 
         response_obj = [{
             "predictions_dataset": predictions_dataset,
-            "image_url": os.path.join(UPLOAD_FOLDER, 'actual_vs_predicted.png'),
+            "image_url": "http://localhost:8501/uploads/actual_vs_predicted.png",
             "message": "Predictions saved successfully."
         }]
 
