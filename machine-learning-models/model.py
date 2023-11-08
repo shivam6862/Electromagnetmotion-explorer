@@ -1,4 +1,5 @@
 # Import necessary libraries
+import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
 import csv
@@ -100,8 +101,15 @@ class Models:
         plt.title('Actual vs Predicted Values')
         plt.legend()  # Add legend
 
+        # Get the current date and time
+        current_time = datetime.datetime.now()
+        # Format the current time as a string (for example: "2023-11-07-15-30-45")
+        formatted_time = current_time.strftime("%Y-%m-%d-%H-%M-%S")
+        # Create the link with the formatted time
+        link = f"actual_vs_predicted_{formatted_time}.png"
+
         # Save the plot as an image file in the uploads directory
-        plt.savefig(os.path.join(UPLOAD_FOLDER, 'actual_vs_predicted.png'))
+        plt.savefig(os.path.join(UPLOAD_FOLDER, link))
 
         # Read existing data from the CSV file and update start_angle for the first row
         with open(csv_file_path, mode='r') as file:
@@ -125,4 +133,4 @@ class Models:
                 writer.writerow(
                     [row['angle'], row['timeInMillisec'], row['start_angle'], row["initial_velocity"]])
 
-        return "predictions_df_ok"
+        return link

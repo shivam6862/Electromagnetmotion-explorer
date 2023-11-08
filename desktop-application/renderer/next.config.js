@@ -2,7 +2,14 @@
 module.exports = {
   trailingSlash: true,
   images: {
-    unoptimized: true,
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8501",
+        // pathname: "/account123/**",
+      },
+    ],
   },
   webpack: (config) => {
     return config;

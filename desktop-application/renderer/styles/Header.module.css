@@ -22,7 +22,11 @@
   align-items: center;
   gap: 0.3rem;
 }
-.header_left_first > img {
+.header_left_first > a {
+  all: unset;
+  cursor: pointer;
+}
+.header_left_first > a > img {
   width: var(--ft-900);
   height: var(--ft-900);
   border-radius: 50%;

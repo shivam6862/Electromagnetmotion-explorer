@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Button from "./Button";
 import { PiPlugsConnectedBold } from "react-icons/pi";
 import {
@@ -12,13 +12,19 @@ import classes from "../../styles/button/buttons.module.css";
 import { useNotification } from "../../hook/useNotification";
 import socketIoClient from "socket.io-client";
 import usePYModels from "../../hook/usePYModels";
+import ArduinoContext from "../../store/arduino/arduino-context";
 
 let interval;
 
-const Buttons = ({ sendCharacter, chartDataState, setChartDataState }) => {
+const Buttons = ({
+  sendCharacter,
+  chartDataState,
+  setChartDataState,
+  setPythonURLImage,
+}) => {
+  const arduinoCtx = useContext(ArduinoContext);
   const { generateImage } = usePYModels();
   const { NotificationHandler } = useNotification();
-  const [webSerialId, setWebSerialId] = useState("NO");
   const [readCharacter, setReadCharacter] = useState("R");
   const [isReadButtonActive, setIsReadButtonActive] = useState(true);
 
@@ -38,24 +44,6 @@ const Buttons = ({ sendCharacter, chartDataState, setChartDataState }) => {
     <AiFillRead />,
     <IoStopwatchOutline />,
   ];
-  const handleConnectSerial = async () => {
-    try {
-      const response = await window.webSerialApi.requestSerialPort();
-      if (response.type == "Success") setWebSerialId(response.message);
-      else if (response.type == "Error")
-        NotificationHandler(
-          "ElectroMagnetMotion Explorer",
-          response.message,
-          response.type
-        );
-    } catch (error) {
-      NotificationHandler(
-        "ElectroMagnetMotion Explorer",
-        error.message,
-        "Warn"
-      );
-    }
-  };
   const handleSendCharacter = async () => {
     if (sendCharacter == "") {
       NotificationHandler(
@@ -92,15 +80,21 @@ const Buttons = ({ sendCharacter, chartDataState, setChartDataState }) => {
   };
 
   const handleReadCharacter = async () => {
+    setChartDataState([]);
     setIsReadButtonActive(false);
     const globalTimeInMilliseconds = new Date().getTime();
+    var lastNegativeAngle = false;
     try {
       interval = setInterval(async () => {
+        console.log(lastNegativeAngle);
         try {
           const response = await window.webSerialApi.readSerialPort();
+          console.log(response.message);
           if (response.message !== undefined) {
             const message = response.message;
+            console.log(message);
             const values = message.split(",");
+            console.log(values);
             var validAngles = [];
             var angleObjects = [];
             values.map((value, index) => {
@@ -109,6 +103,7 @@ const Buttons = ({ sendCharacter, chartDataState, setChartDataState }) => {
                 const decimalCount = value.split(".")[1]
                   ? value.split(".")[1].length
                   : 0;
+                console.log(floatValue, decimalCount);
                 if (decimalCount === 2) {
                   validAngles.push(floatValue);
                   const currentTimeInMilliseconds = new Date().getTime();
@@ -128,13 +123,15 @@ const Buttons = ({ sendCharacter, chartDataState, setChartDataState }) => {
                   }
                   if (angleObjects.length == 0) {
                     angleObjects.push({
-                      angle: floatValue,
+                      angle: lastNegativeAngle ? -1 * floatValue : floatValue,
                       timeInMillisec: currentTimestamp,
                     });
                   }
                 }
               }
             });
+            if (validAngles.length >= 1)
+              lastNegativeAngle = validAngles[validAngles.length - 1] < 0;
             setReadCharacter(response.message);
             console.log(angleObjects);
             setChartDataState((prev) => [...prev, ...angleObjects]);
@@ -165,8 +162,10 @@ const Buttons = ({ sendCharacter, chartDataState, setChartDataState }) => {
   };
   const handleStopReadCharacter = async () => {
     clearInterval(interval);
-    generateImage(chartDataState);
     console.log(chartDataState);
+    const response = await generateImage(chartDataState);
+    console.log(response);
+    setPythonURLImage([...response]);
     setIsReadButtonActive(true);
   };
 
@@ -230,8 +229,7 @@ const Buttons = ({ sendCharacter, chartDataState, setChartDataState }) => {
         <Button
           heading={BUTTONS[0]}
           icon={ICONS[0]}
-          dataShow={webSerialId}
-          onClick={handleConnectSerial}
+          dataShow={arduinoCtx.webSerialAPI.port}
         />
         <Button
           heading={BUTTONS[1]}

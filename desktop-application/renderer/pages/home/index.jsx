@@ -12,6 +12,7 @@ const Home = () => {
   const [message, setMessage] = useState("Hii, Shivam kumar!");
   const [sendCharacter, setSendCharacter] = useState("");
   const [chartDataState, setChartDataState] = useState([]);
+  const [pythonURLImage, setPythonURLImage] = useState(["/bg-amazing.webp"]);
 
   useEffect(() => {
     window.ipc.on("message", (message) => {
@@ -46,21 +47,18 @@ const Home = () => {
           sendCharacter={sendCharacter}
           chartDataState={chartDataState}
           setChartDataState={setChartDataState}
+          setPythonURLImage={setPythonURLImage}
         />
         <div className={classes.line_chart}>
           <LineChart chartDataState={chartDataState} />
           <LineChart chartDataState={chartDataState} />
         </div>
         <div className={classes.images_from_ml}>
-          <div className={classes.image_from_ml}>
-            <Image src={"/bg-amazing.webp"} width={500} height={400} alt="i" />
-          </div>
-          <div className={classes.image_from_ml}>
-            <Image src={"/bg-amazing.webp"} width={500} height={400} alt="i" />
-          </div>
-          <div className={classes.image_from_ml}>
-            <Image src={"/bg-amazing.webp"} width={500} height={400} alt="i" />
-          </div>
+          {pythonURLImage.map((item, index) => (
+            <div className={classes.image_from_ml} key={index}>
+              <Image src={item} width={500} height={400} alt="i" key={index} />
+            </div>
+          ))}
         </div>
         <Button
           heading={"Test IPC"}

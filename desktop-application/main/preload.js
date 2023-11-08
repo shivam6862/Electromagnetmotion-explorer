@@ -97,14 +97,16 @@ contextBridge.exposeInMainWorld("webSerialApi", {
           };
         }
       } catch (error) {
+        console.log(error.message);
         return {
           type: "Error",
-          message: undefined,
+          message: error.message,
         };
       } finally {
         reader.releaseLock(); // Release the reader's lock when done
       }
     } else {
+      console.log("help!");
       return {
         type: "Error",
         message: undefined,

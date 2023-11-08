@@ -23,8 +23,8 @@ const LineChart = ({ chartDataState }) => {
         ),
         borderColor: "#ff7100",
         backgroundColor: "rgb(255, 113, 0, 0.3)",
-        borderWidth: 1.5,
-        pointRadius: 0.1,
+        borderWidth: 0.2,
+        pointRadius: 2,
       },
     ],
   };
@@ -59,8 +59,8 @@ const LineChart = ({ chartDataState }) => {
       },
       y: {
         type: "linear",
-        min: -1.5,
-        max: 1.5,
+        min: -1,
+        max: 1,
         grid: {
           color: "#ff7100",
         },

@@ -27,7 +27,12 @@
   display: flex;
   gap: 2rem;
 }
-.links-container > a {
+.links-container button:disabled {
+  background-color: #dddddd;
+  color: #666666;
+  cursor: not-allowed;
+}
+.get-start {
   border-radius: 40px;
   border: 1.5px solid var(--primary-color);
   background: var(--bg-primary-inside);
@@ -43,9 +48,6 @@
   justify-content: center;
   width: 220px;
 }
-.links-container > a:nth-child(2) {
-  border: none;
-}
 .play {
   border-radius: 40px;
   border: 1.5px solid var(--primary-color);
@@ -60,7 +62,12 @@
   gap: 0.5rem;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+  border: none;
 }
 .play > svg {
   font-size: var(--ft-700);
+}
+.get-start > svg {
+  font-size: var(--ft-600);
 }
