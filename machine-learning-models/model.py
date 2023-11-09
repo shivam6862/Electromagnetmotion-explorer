@@ -1,4 +1,5 @@
 # Import necessary libraries
+from sklearn.metrics import mean_squared_error
 import datetime
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -8,6 +9,7 @@ import sys
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeClassifier
 import matplotlib
+import numpy as np
 matplotlib.use('Agg')
 
 # Define the upload folder
@@ -38,8 +40,8 @@ class Models:
                 updated_data.append(row)
 
         updated_data_df = pd.DataFrame(updated_data)
-        X_train = updated_data_df.drop(columns=["timeInMillisec"])
-        y_train = updated_data_df["timeInMillisec"]
+        X_train = updated_data_df.drop(columns=["angle"])
+        y_train = updated_data_df["angle"]
 
         print(X_train.head())
         print(y_train.head())
@@ -54,8 +56,18 @@ class Models:
         linear_reg = self.linear
         decision_tree_reg = self.decisionTree
 
+        # Convert timeInMillisec to seconds
+        for entry in dataset:
+            entry['timeInMillisec'] = int(entry['timeInMillisec'])/1000
+
+        # Extract actual angles from the dataset
+        actual_angles = [data_point["angle"] for data_point in dataset]
+        # Print the resulting array of actual angles
+        print("actual_angles", actual_angles)
+
         updated_data = []
 
+        # Read existing data from the CSV file and update start_angle for the first row
         for entry in dataset:
             updated_data.append({
                 'angle': entry['angle'],
@@ -64,9 +76,10 @@ class Models:
                 'initial_velocity': 0
             })
 
+        # Write the updated data to the CSV file
         updated_data_df = pd.DataFrame(updated_data)
-        X_test = updated_data_df.drop(columns=["timeInMillisec"])
-        y_test = updated_data_df["timeInMillisec"]
+        X_test = updated_data_df.drop(columns=["angle"])
+        y_test = updated_data_df["angle"]
 
         print(updated_data_df.head())
 
@@ -111,6 +124,44 @@ class Models:
         # Save the plot as an image file in the uploads directory
         plt.savefig(os.path.join(UPLOAD_FOLDER, link))
 
+        # Assuming linear_reg_preds and actual_angles are your predicted and actual angle values
+        # Calculate Mean Squared Error
+        mse = mean_squared_error(actual_angles, linear_reg_preds)
+        # Create a figure
+        plt.figure(figsize=(10, 6))
+        # Plot actual angles
+        plt.plot(actual_angles, label='Actual Angles', marker='o', color='b')
+        # Plot predicted angles
+        plt.plot(linear_reg_preds, label='Predicted Angles',
+                 marker='x', color='r')
+        # Add labels and title
+        plt.xlabel('Data Points')
+        plt.ylabel('Angles')
+        plt.title(
+            'Actual vs Predicted Angles (Mean Squared Error: {:.2f})'.format(mse))
+        # Add legend
+        plt.legend()
+        # Create the link with the formatted time
+        link_for_mse = f"mean_squared_error{formatted_time}.png"
+        # Save the plot as an image file in the uploads directory
+        plt.savefig(os.path.join(UPLOAD_FOLDER, link_for_mse))
+
+        # Calculate residuals
+        residuals = np.array(actual_angles) - np.array(linear_reg_preds)
+        # Create a residual plot
+        plt.figure(figsize=(10, 6))
+        plt.scatter(linear_reg_preds, residuals, color='b', marker='o')
+        plt.axhline(y=0, color='r', linestyle='--')
+        plt.xlabel('Predicted Angles')
+        plt.ylabel('Residuals')
+        plt.title('Residual Plot')
+        # Add legend
+        plt.legend()
+        # Create the link with the formatted time
+        link_for_residuals = f"link_for_residuals{formatted_time}.png"
+        # Save the plot as an image file in the uploads directory
+        plt.savefig(os.path.join(UPLOAD_FOLDER, link_for_residuals))
+
         # Read existing data from the CSV file and update start_angle for the first row
         with open(csv_file_path, mode='r') as file:
             reader = csv.DictReader(file)
@@ -133,4 +184,4 @@ class Models:
                 writer.writerow(
                     [row['angle'], row['timeInMillisec'], row['start_angle'], row["initial_velocity"]])
 
-        return link
+        return [link, link_for_mse, link_for_residuals]

@@ -11,7 +11,9 @@ import { PiPlugsConnectedBold } from "react-icons/pi";
 const Home = () => {
   const arduinoCtx = useContext(ArduinoContext);
   const [chartDataState, setChartDataState] = useState([]);
-  const [pythonURLImage, setPythonURLImage] = useState(["/bg-amazing.webp"]);
+  const [pythonURLImage, setPythonURLImage] = useState([
+    "actual_vs_predicted_2023-11-09-18-51-31.png",
+  ]);
 
   return (
     <div className={classes.container}>
@@ -38,7 +40,13 @@ const Home = () => {
         <div className={classes.images_from_ml}>
           {pythonURLImage.map((item, index) => (
             <div className={classes.image_from_ml} key={index}>
-              <Image src={item} width={500} height={400} alt="i" key={index} />
+              <Image
+                src={`http://localhost:8501/uploads/${item}`}
+                width={500}
+                height={400}
+                alt={item}
+                key={index}
+              />
             </div>
           ))}
         </div>
