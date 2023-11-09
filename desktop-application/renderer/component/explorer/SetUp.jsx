@@ -15,9 +15,14 @@ const SetUp = ({ heading, paragraph, link }) => {
     try {
       const response = await window.webSerialApi.requestSerialPort();
       console.log(response);
-      if (response.type == "Success")
+      if (response.type == "Success") {
+        NotificationHandler(
+          "ElectroMagnetMotion Explorer",
+          "Connected to USB",
+          "Success"
+        );
         arduinoCtx.onaddWebSerialAPI(response.message, response.type);
-      else if (response.type == "Error") {
+      } else if (response.type == "Error") {
         arduinoCtx.onaddWebSerialAPI("Port not found", response.type);
         NotificationHandler(
           "ElectroMagnetMotion Explorer",
@@ -36,14 +41,8 @@ const SetUp = ({ heading, paragraph, link }) => {
 
   const isConnectedWebSerialApiHandle = () => {
     if (arduinoCtx.webSerialAPI.status == "Success") {
-      NotificationHandler(
-        "ElectroMagnetMotion Explorer",
-        "Connected to USB",
-        "Success"
-      );
       router.push("/home");
     } else {
-      router.push("/home");
       NotificationHandler(
         "ElectroMagnetMotion Explorer",
         "Please connect the USB first",

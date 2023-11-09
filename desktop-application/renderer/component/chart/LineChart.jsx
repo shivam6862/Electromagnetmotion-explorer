@@ -48,7 +48,7 @@ const LineChart = ({ chartDataState }) => {
       x: {
         type: "linear",
         min: 1,
-        max: 40000,
+        max: 30000,
         grid: {
           color: "#ff7100",
         },

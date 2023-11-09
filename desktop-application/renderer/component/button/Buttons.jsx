@@ -26,59 +26,28 @@ const Buttons = ({ chartDataState, setChartDataState, setPythonURLImage }) => {
   const handleReadCharacter = async () => {
     setChartDataState([]);
     setIsReadButtonActive(false);
-    const globalTimeInMilliseconds = new Date().getTime();
-    var lastNegativeAngle = false;
     try {
       interval = setInterval(async () => {
-        console.log(lastNegativeAngle);
         try {
           const response = await window.webSerialApi.readSerialPort();
-          console.log(response.message);
+          console.log("message", response.message);
           if (response.message !== undefined) {
-            const message = response.message;
-            console.log(message);
-            const values = message.split(",");
-            console.log(values);
-            var validAngles = [];
-            var angleObjects = [];
-            values.map((value, index) => {
-              const floatValue = parseFloat(value);
-              if (!isNaN(floatValue) && floatValue >= -90 && floatValue <= 90) {
-                const decimalCount = value.split(".")[1]
-                  ? value.split(".")[1].length
-                  : 0;
-                console.log(floatValue, decimalCount);
-                if (decimalCount === 2) {
-                  validAngles.push(floatValue);
-                  const currentTimeInMilliseconds = new Date().getTime();
-                  const currentTimestamp =
-                    currentTimeInMilliseconds - globalTimeInMilliseconds;
-                  if (
-                    angleObjects.length > 0 &&
-                    chartDataState.length > 0 &&
-                    angleObjects[angleObjects.length - 1].angle != floatValue &&
-                    chartDataState[chartDataState.length - 1].angle !=
-                      floatValue
-                  ) {
-                    angleObjects.push({
-                      angle: floatValue,
-                      timeInMillisec: currentTimestamp,
-                    });
-                  }
-                  if (angleObjects.length == 0) {
-                    angleObjects.push({
-                      angle: lastNegativeAngle ? -1 * floatValue : floatValue,
-                      timeInMillisec: currentTimestamp,
-                    });
-                  }
-                }
-              }
-            });
-            if (validAngles.length >= 1)
-              lastNegativeAngle = validAngles[validAngles.length - 1] < 0;
+            const inputString = response.message;
+            let pairs = inputString.split("],");
+            let arrayOfObjects = [];
+            for (let i = 1; i < pairs.length - 1; i++) {
+              let [angle, time] = pairs[i].split("[");
+              let angleValue = parseFloat(angle);
+              let timeInMillisec = parseInt(time);
+              let obj = {
+                angle: angleValue,
+                timeInMillisec: timeInMillisec,
+              };
+              arrayOfObjects.push(obj);
+            }
+            console.log(arrayOfObjects);
             setReadCharacter(response.message);
-            console.log(angleObjects);
-            setChartDataState((prev) => [...prev, ...angleObjects]);
+            setChartDataState((prev) => [...prev, ...arrayOfObjects]);
           }
         } catch (error) {
           NotificationHandler(
@@ -89,7 +58,7 @@ const Buttons = ({ chartDataState, setChartDataState, setPythonURLImage }) => {
           clearInterval(interval);
           setIsReadButtonActive(true);
         }
-      }, 10);
+      }, 100);
     } catch (error) {
       NotificationHandler(
         "ElectroMagnetMotion Explorer",
