@@ -5,18 +5,6 @@ import { app, ipcMain, nativeTheme, Notification, dialog } from "electron";
 import { Menu, globalShortcut, Tray } from "electron";
 import { createWindow, ownMenu, customCtxMenu } from "./helpers";
 
-// For web-socket connection
-const express = require("express");
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-const appExpress = express();
-const httpServer = createServer(appExpress);
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-  },
-});
-
 // Check if the application is in production mode
 const isProd = process.env.NODE_ENV === "production";
 
@@ -231,26 +219,3 @@ ipcMain.handle("externals-links:open", async (event, link) => {
   await shell.openExternal(link);
   return "opened!";
 });
-
-// 6. Socket.IO
-io.on("connection", async (socket) => {
-  console.log("Connecting for the user!");
-
-  const response = "Ok recivied First call!";
-  socket.emit("messagesForYou", response);
-
-  socket.on("postMessage", async ({ text }) => {
-    const response = `Ok recivied messages Updated call! ${text}`;
-    io.emit("messagesUpdated", response);
-  });
-
-  socket.on("serialData", (data) => {
-    console.log("Received serial data:", data);
-  });
-
-  socket.on("disconnect", () => {
-    console.log("Client Disconnected!");
-  });
-});
-
-httpServer.listen(8000);

@@ -1,28 +1,17 @@
 import Head from "next/head";
 import Image from "next/image";
-import React, { useState, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import classes from "../../styles/Home.module.css";
 import Header from "../../component/Header";
 import LineChart from "../../component/chart/LineChart";
 import Buttons from "../../component/button/Buttons";
-import Button from "../../component/button/Button";
-import { SiSpeedtest } from "react-icons/si";
+import ArduinoContext from "../../store/arduino/arduino-context";
+import { PiPlugsConnectedBold } from "react-icons/pi";
 
 const Home = () => {
-  const [message, setMessage] = useState("Hii, Shivam kumar!");
-  const [sendCharacter, setSendCharacter] = useState("");
+  const arduinoCtx = useContext(ArduinoContext);
   const [chartDataState, setChartDataState] = useState([]);
   const [pythonURLImage, setPythonURLImage] = useState(["/bg-amazing.webp"]);
-
-  useEffect(() => {
-    window.ipc.on("message", (message) => {
-      setMessage(message);
-    });
-
-    return () => {
-      window.ipc.removeAllListeners("message");
-    };
-  }, []);
 
   return (
     <div className={classes.container}>
@@ -33,18 +22,11 @@ const Home = () => {
       </Head>
       <Header href={"explorer"} page={"Home"} />
       <div className={classes.box}>
-        <div className={classes.input_area}>
-          <input
-            type="text"
-            id="character"
-            value={sendCharacter}
-            onChange={(e) => {
-              setSendCharacter(e.target.value);
-            }}
-          />
+        <div className={classes.about_connection}>
+          <PiPlugsConnectedBold />
+          {"   "} Web Serial API :- {arduinoCtx.webSerialAPI.port}
         </div>
         <Buttons
-          sendCharacter={sendCharacter}
           chartDataState={chartDataState}
           setChartDataState={setChartDataState}
           setPythonURLImage={setPythonURLImage}
@@ -60,15 +42,6 @@ const Home = () => {
             </div>
           ))}
         </div>
-        <Button
-          heading={"Test IPC"}
-          icon={<SiSpeedtest />}
-          index={1}
-          onClick={() => {
-            window.ipc.send("message", "Electromagnetmotion ");
-          }}
-        />
-        <p>{message}</p>
       </div>
     </div>
   );

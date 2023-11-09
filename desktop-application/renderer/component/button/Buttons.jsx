@@ -1,83 +1,27 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import Button from "./Button";
-import { PiPlugsConnectedBold } from "react-icons/pi";
-import {
-  BsFillSendPlusFill,
-  BsFillSkipStartCircleFill,
-  BsSignStopFill,
-} from "react-icons/bs";
+import { BsSignStopFill, BsFillSkipStartCircleFill } from "react-icons/bs";
 import { AiFillRead } from "react-icons/ai";
 import { IoStopwatchOutline } from "react-icons/io5";
 import classes from "../../styles/button/buttons.module.css";
 import { useNotification } from "../../hook/useNotification";
-import socketIoClient from "socket.io-client";
 import usePYModels from "../../hook/usePYModels";
-import ArduinoContext from "../../store/arduino/arduino-context";
 
 let interval;
 
-const Buttons = ({
-  sendCharacter,
-  chartDataState,
-  setChartDataState,
-  setPythonURLImage,
-}) => {
-  const arduinoCtx = useContext(ArduinoContext);
+const Buttons = ({ chartDataState, setChartDataState, setPythonURLImage }) => {
   const { generateImage } = usePYModels();
   const { NotificationHandler } = useNotification();
   const [readCharacter, setReadCharacter] = useState("R");
   const [isReadButtonActive, setIsReadButtonActive] = useState(true);
 
-  const BUTTONS = [
-    "Web Serial API",
-    "Send character",
-    "Start work",
-    "Stop work",
-    "Read character",
-    "Stop Reading",
-  ];
+  const BUTTONS = ["Start work", "Stop work", "Read character", "Stop Reading"];
   const ICONS = [
-    <PiPlugsConnectedBold />,
-    <BsFillSendPlusFill />,
     <BsFillSkipStartCircleFill />,
     <BsSignStopFill />,
     <AiFillRead />,
     <IoStopwatchOutline />,
   ];
-  const handleSendCharacter = async () => {
-    if (sendCharacter == "") {
-      NotificationHandler(
-        "ElectroMagnetMotion Explorer",
-        "Please fill a character!",
-        "Info"
-      );
-      return;
-    } else if (sendCharacter.length > 1) {
-      NotificationHandler(
-        "ElectroMagnetMotion Explorer",
-        "Fill a single character!",
-        "Warn"
-      );
-      return;
-    }
-    try {
-      const response = await window.webSerialApi.sendCharacterToSerialPort(
-        sendCharacter
-      );
-      if (response.type == "Error")
-        NotificationHandler(
-          "ElectroMagnetMotion Explorer",
-          response.message,
-          response.type
-        );
-    } catch (error) {
-      NotificationHandler(
-        "ElectroMagnetMotion Explorer",
-        error.message,
-        "Warn"
-      );
-    }
-  };
 
   const handleReadCharacter = async () => {
     setChartDataState([]);
@@ -168,7 +112,6 @@ const Buttons = ({
     setPythonURLImage([...response]);
     setIsReadButtonActive(true);
   };
-
   const handleStartWork = async () => {
     try {
       const response = await window.workApi.sendCharacterToStartWork("S");
@@ -206,59 +149,31 @@ const Buttons = ({
     }
   };
 
-  const [socket, setSocket] = useState(null);
-  useEffect(() => {
-    const establishSocketConnection = async () => {
-      const socket = socketIoClient(`http://127.0.0.1:8000`, {});
-      console.log(socket);
-      setSocket(socket);
-      socket.emit("serialData", "value");
-      socket.on("messagesForYou", (response) => {
-        console.log(response);
-      });
-      socket.on("messagesUpdated", (response) => {
-        console.log(response);
-      });
-    };
-    establishSocketConnection();
-  }, []);
-
   return (
     <div className={classes.container}>
       <div className={classes.box}>
         <Button
           heading={BUTTONS[0]}
           icon={ICONS[0]}
-          dataShow={arduinoCtx.webSerialAPI.port}
-        />
-        <Button
-          heading={BUTTONS[1]}
-          icon={ICONS[1]}
-          dataShow={"H"}
-          onClick={handleSendCharacter}
-        />
-        <Button
-          heading={BUTTONS[2]}
-          icon={ICONS[2]}
           dataShow={"S"}
           onClick={handleStartWork}
         />
         <Button
-          heading={BUTTONS[3]}
-          icon={ICONS[3]}
+          heading={BUTTONS[1]}
+          icon={ICONS[1]}
           dataShow={"C"}
           onClick={handleStopWork}
         />
         <Button
-          heading={BUTTONS[4]}
-          icon={ICONS[4]}
+          heading={BUTTONS[2]}
+          icon={ICONS[2]}
           dataShow={readCharacter}
           onClick={handleReadCharacter}
           disabled={!isReadButtonActive}
         />
         <Button
-          heading={BUTTONS[5]}
-          icon={ICONS[5]}
+          heading={BUTTONS[3]}
+          icon={ICONS[3]}
           dataShow={""}
           onClick={handleStopReadCharacter}
           disabled={isReadButtonActive}

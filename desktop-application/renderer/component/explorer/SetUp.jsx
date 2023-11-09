@@ -12,7 +12,6 @@ const SetUp = ({ heading, paragraph, link }) => {
   const router = useRouter();
 
   const handleConnectSerial = async () => {
-    console.log(2);
     try {
       const response = await window.webSerialApi.requestSerialPort();
       console.log(response);
@@ -37,8 +36,14 @@ const SetUp = ({ heading, paragraph, link }) => {
 
   const isConnectedWebSerialApiHandle = () => {
     if (arduinoCtx.webSerialAPI.status == "Success") {
+      NotificationHandler(
+        "ElectroMagnetMotion Explorer",
+        "Connected to USB",
+        "Success"
+      );
       router.push("/home");
     } else {
+      router.push("/home");
       NotificationHandler(
         "ElectroMagnetMotion Explorer",
         "Please connect the USB first",
