@@ -35,9 +35,14 @@ To run the Electromagnet Motion Explorer desktop application locally, follow the
 4. **machine-learning-models**
    ```
        cd machine-learning-models
-       pip install `all dependencies`
-       pytnon main.py
+       pip install `requirements.txt`
+       python main.py
    ```
+5. **mobile-application**
+
+```
+install all the dependencies
+```
 
 ## Usage
 
@@ -45,6 +50,28 @@ To run the Electromagnet Motion Explorer desktop application locally, follow the
 2. Explore the LED modeling and simulation features to visualize pendulum damping motion.
 3. Use the real-time data exploration tools to interact with the simulations and observe the effects of different parameters on electromagnet motion.
 4. Enjoy a seamless and intuitive interface designed for an optimal user experience.
+
+## Snapshot
+
+### Home Page
+
+![Home Logo](./desktop-application/HOME.png)
+
+### Working model Page
+
+![Working model Page](./desktop-application/renderer/public/window_complete.png)
+
+### Machine learning actual vs predicted graph
+
+![Machine learning actual vs predicted graph](./machine-learning-models/uploads/actual_vs_predicted_2023-11-10-11-17-33.png)
+
+### mean squared error by Decision Tree
+
+![mean squared error by Decision Tree](./machine-learning-models/uploads/mean_squared_error_random_forest2023-11-10-09-26-11.png)
+
+### mean squared error by RandomForest
+
+![mean squared error by RandomForest](./machine-learning-models/uploads/mean_squared_error_random_forest2023-11-10-11-17-33.png)
 
 ## Contributing
 
