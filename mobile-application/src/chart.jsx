@@ -4,8 +4,10 @@ import {
   Area,
   HorizontalAxis,
   VerticalAxis,
+  Label,
+  Tooltip,
 } from 'react-native-responsive-linechart';
-import {SafeAreaView, View} from 'react-native';
+import {SafeAreaView, Text, View} from 'react-native';
 
 const ChartView = ({data}) => {
   return (
@@ -19,11 +21,14 @@ const ChartView = ({data}) => {
         yDomain={{min: -1, max: 1}}>
         <VerticalAxis
           tickCount={11}
-          theme={{labels: {formatter: v => v.toFixed(2), color: '#fff'}}}
-        />
+          theme={{
+            labels: {formatter: v => v.toFixed(2), color: '#fff'},
+          }}></VerticalAxis>
         <HorizontalAxis
           tickCount={5}
-          theme={{labels: {formatter: v => v.toFixed(2), color: '#fff'}}}
+          theme={{
+            labels: {formatter: v => (v / 1000).toFixed(2), color: '#fff'},
+          }}
         />
         {/* <Area
           theme={{
@@ -39,13 +44,17 @@ const ChartView = ({data}) => {
             scatter: {default: {width: 4, height: 4, rx: 2}},
           }}
         /> */}
-        <Line theme={{stroke: {color: '#2ecc71', width: 1}}} />
+        <Line
+          tooltipComponent={<Tooltip />}
+          theme={{stroke: {color: '#7B1FA2', width: 1.5}}}
+        />
         {/* <Area
           theme={{
             gradient: {from: '#2ecc71', to: '#2ecc71', direction: 'vertical'},
           }}
         /> */}
       </Chart>
+      <Text style={{color: '#000'}}>sin(angle) VS time(s)</Text>
     </View>
   );
 };
