@@ -17,6 +17,7 @@ import Toast from '@remobile/react-native-toast';
 import BluetoothSerial from 'react-native-bluetooth-serial';
 import ChartView from './chart';
 import {Buffer} from 'buffer';
+import usePYModels from './usePYModels';
 global.Buffer = Buffer;
 const iconv = require('iconv-lite');
 
@@ -92,21 +93,9 @@ function BluetoothSerialExample() {
     recievedData: [],
     isSubscribed: false,
   });
-  const [chartDataState, setChartDataState] = useState([
-    {x: -2, y: 15},
-    {x: -1, y: 10},
-    {x: 0, y: 12},
-    {x: 1, y: 7},
-    {x: 2, y: 6},
-    {x: 3, y: 8},
-    {x: 4, y: 10},
-    {x: 5, y: 8},
-    {x: 6, y: 12},
-    {x: 7, y: 14},
-    {x: 8, y: 12},
-    {x: 9, y: 13.5},
-    {x: 10, y: 18},
-  ]);
+  const [chartDataState, setChartDataState] = useState([{x: 0, y: 0}]);
+  const [pythonURLImage, setPythonURLImage] = useState([]);
+  const {generateImage} = usePYModels();
 
   useEffect(() => {
     (async () => {
@@ -520,7 +509,9 @@ function BluetoothSerialExample() {
               let timeInMillisec = parseInt(time);
               let obj = {
                 x: timeInMillisec,
-                y: Math.sin((angleValue * Math.PI) / 180),
+                y: Math.sin(((angleValue * Math.PI) / 180).toFixed(2)).toFixed(
+                  2,
+                ),
               };
               arrayOfObjects.push(obj);
             }
@@ -551,11 +542,19 @@ function BluetoothSerialExample() {
       };
     }
   };
-  function deleteInterval() {
+  async function deleteInterval() {
+    if (!interval) return;
     clearInterval(interval);
     setState(state => {
       return {...state, isSubscribed: false};
     });
+    const prev = chartDataState;
+    prev.map(row => ({
+      angle: Math.asin(row.y).toFixed(2),
+      timeInMillisec: row.x,
+    }));
+    const response = await generateImage(prev);
+    setPythonURLImage([...response]);
   }
   async function onUnsubscribe() {
     try {
@@ -643,8 +642,20 @@ function BluetoothSerialExample() {
         />
       )}
       {state.section === 2 && (
-        <View style={{paddingTop: 10, backgroundColor: '#fff'}}>
-          <ScrollView>
+        <View
+          style={{
+            paddingTop: 10,
+            backgroundColor: '#fff',
+            flexDirection: 'column',
+            minHeight: '100vh',
+          }}>
+          <ScrollView
+            style={{
+              paddingTop: 10,
+              backgroundColor: '#fff',
+              flexDirection: 'column',
+              minHeight: 1000,
+            }}>
             <View>
               <TouchableOpacity
                 onPress={() => {
@@ -702,19 +713,57 @@ function BluetoothSerialExample() {
             </View>
             <ChartView data={chartDataState} />
             <View
-              style={{alignItems: 'center', flexDirection: 'column', gap: 10}}>
-              <Image
+              style={{
+                alignItems: 'center',
+                flexDirection: 'column',
+                gap: 10,
+                marginTop: 20,
+                marginBottom: 110,
+                // backgroundColor: '#000',
+              }}>
+              <Text
+                style={{
+                  color: '#000',
+                  fontSize: 20,
+                  fontWeight: 500,
+                  marginVertical: 10,
+                }}>
+                ML Images
+              </Text>
+              {/* <Image
                 source={require('./images/actual_vs_predicted.png')}
-                style={{resizeMode: 'contain', width: 350, height: 250}}
+                style={{resizeMode: 'cover', width: 350, height: 300}}
               />
               <Image
                 source={require('./images/actual_vs_predicted.png')}
-                style={{resizeMode: 'contain', width: 350, height: 250}}
+                style={{resizeMode: 'cover', width: 350, height: 300}}
               />
               <Image
                 source={require('./images/actual_vs_predicted.png')}
-                style={{resizeMode: 'contain', width: 350, height: 250}}
-              />
+                style={{resizeMode: 'cover', width: 350, height: 300}}
+              /> */}
+              {pythonURLImage.length > 0 ? (
+                pythonURLImage.map((item, index) => (
+                  <div className={classes.image_from_ml} key={index}>
+                    <Image
+                      src={`http://localhost:8501/uploads/${item}`}
+                      width={500}
+                      height={400}
+                      alt={item}
+                      key={index}
+                    />
+                  </div>
+                ))
+              ) : (
+                <Text
+                  style={{
+                    color: '#000',
+                    fontSize: 15,
+                    fontWeight: 500,
+                  }}>
+                  There are no images.
+                </Text>
+              )}
             </View>
           </ScrollView>
         </View>
