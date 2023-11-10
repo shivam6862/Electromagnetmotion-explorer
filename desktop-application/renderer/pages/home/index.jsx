@@ -12,7 +12,9 @@ const Home = () => {
   const arduinoCtx = useContext(ArduinoContext);
   const [chartDataState, setChartDataState] = useState([]);
   const [pythonURLImage, setPythonURLImage] = useState([
-    "actual_vs_predicted_2023-11-09-18-51-31.png",
+    "actual_vs_predicted_2023-11-10-01-56-49.png",
+    "mean_squared_error_2023-11-10-01-56-49.png",
+    "residuals_2023-11-10-01-56-49.png",
   ]);
 
   return (

@@ -18,13 +18,11 @@ const LineChart = ({ chartDataState }) => {
     datasets: [
       {
         label: "Angle",
-        data: chartDataState.map((data) =>
-          Math.sin((data.angle * Math.PI) / 180).toString()
-        ),
+        data: chartDataState.map((data) => data.angle.toString()),
         borderColor: "#ff7100",
         backgroundColor: "rgb(255, 113, 0, 0.3)",
-        borderWidth: 0.2,
-        pointRadius: 2,
+        borderWidth: 1.1,
+        pointRadius: 1,
       },
     ],
   };
@@ -48,7 +46,7 @@ const LineChart = ({ chartDataState }) => {
       x: {
         type: "linear",
         min: 1,
-        max: 25000,
+        max: 16000,
         grid: {
           color: "#ff7100",
         },
@@ -59,14 +57,14 @@ const LineChart = ({ chartDataState }) => {
       },
       y: {
         type: "linear",
-        min: -1,
-        max: 1,
+        min: -60,
+        max: 60,
         grid: {
           color: "#ff7100",
         },
         title: {
           display: true,
-          text: "Sin value (angle in degree)",
+          text: "Angle in degrees",
         },
       },
     },

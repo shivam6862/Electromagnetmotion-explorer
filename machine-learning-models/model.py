@@ -8,6 +8,7 @@ import os
 import sys
 from sklearn.linear_model import LinearRegression
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import RandomForestRegressor
 import matplotlib
 import numpy as np
 matplotlib.use('Agg')
@@ -22,7 +23,7 @@ sys.path.append(os.getcwd())
 class Models:
     def __init__(self):
         # Initialize Linear Regression and Logistic Regression models
-        self.linear = LinearRegression()
+        self.RandomForest = RandomForestRegressor()
         self.decisionTree = DecisionTreeClassifier()
 
         if not os.path.exists(UPLOAD_FOLDER):
@@ -47,13 +48,13 @@ class Models:
         print(y_train.head())
 
         # Fit Linear Regression and Logistic Regression models with training data
-        self.linear.fit(X_train, y_train)
+        self.RandomForest.fit(X_train, y_train)
         self.decisionTree.fit(X_train, y_train)
 
         print("CSV file updated successfully.")
 
     def model(self, dataset):
-        linear_reg = self.linear
+        randomForest_reg = self.RandomForest
         decision_tree_reg = self.decisionTree
 
         # Convert timeInMillisec to seconds
@@ -79,31 +80,40 @@ class Models:
         # Write the updated data to the CSV file
         updated_data_df = pd.DataFrame(updated_data)
         X_test = updated_data_df.drop(columns=["angle"])
-        y_test = updated_data_df["angle"]
+        # y_test = updated_data_df["angle"]
+        y_test = updated_data_df["angle"].values.astype(float)
 
         print(updated_data_df.head())
 
+        print(1)
         # Make predictions using both models on test data
-        linear_reg_preds = linear_reg.predict(X_test)
+        # linear_reg_preds = linear_reg.predict(X_test)
         decision_tree_reg_preds = decision_tree_reg.predict(X_test)
+        decision_tree_reg_preds = [float(pred)
+                                   for pred in decision_tree_reg_preds]
+        randomForest_preds_reg_preds = randomForest_reg.predict(X_test)
 
         # Create a dictionary to store model predictions
         predictions_df = ({
-            'Linear Regression': linear_reg_preds,
+            # 'Linear Regression': linear_reg_preds,
+            "real data": y_test,
             'Decision Tree': decision_tree_reg_preds,
+            'Random Forest': randomForest_preds_reg_preds,
         })
 
+        print(2)
         # Create a figure and axis for plotting
         plt.figure(figsize=(10, 6))
 
         # Plot actual values from the test data
-        plt.plot(y_test, label='Actual Values',
-                 marker='o', linestyle='-', color='b')
+        # plt.plot(actual_angles, label='Actual Values',
+        #          marker='o', linestyle='-', color='b')
 
         # Plot predictions for each model
         color = ["r", "g", "b"]
         i = 0
         for model, preds in predictions_df.items():
+            print(model, preds)
             plt.plot(preds, label=f'{model} Predictions',
                      marker='o', linestyle='-', color=color[i])
             i = i+1
@@ -124,44 +134,63 @@ class Models:
         # Save the plot as an image file in the uploads directory
         plt.savefig(os.path.join(UPLOAD_FOLDER, link))
 
-        # Assuming linear_reg_preds and actual_angles are your predicted and actual angle values
-        # Calculate Mean Squared Error
-        mse = mean_squared_error(actual_angles, linear_reg_preds)
+        print(3)
+        print("decision_tree_reg_preds", decision_tree_reg_preds)
+        # decision_tree_reg_preds = decision_tree_reg_preds.astype(float)
+        # Create an empty list to store MSE values
+        mse_values_decision = []  # Create an empty list to store MSE values
+        for actual_angle, prediction in zip(actual_angles, decision_tree_reg_preds):
+            # Calculate MSE for each data point
+            mse = mean_squared_error([actual_angle], [prediction])
+            mse_values_decision.append(mse)  # Add MSE value to the list
+
+        print("mse_values_decision", mse_values_decision)
+
         # Create a figure
         plt.figure(figsize=(10, 6))
-        # Plot actual angles
-        plt.plot(actual_angles, label='Actual Angles', marker='o', color='b')
-        # Plot predicted angles
-        plt.plot(linear_reg_preds, label='Predicted Angles',
-                 marker='x', color='r')
+        # Plot MSE values for each data point
+        plt.plot(range(len(mse_values_decision)), mse_values_decision,
+                 marker='o', color='b', label='MSE')
         # Add labels and title
         plt.xlabel('Data Points')
-        plt.ylabel('Angles')
-        plt.title(
-            'Actual vs Predicted Angles (Mean Squared Error: {:.2f})'.format(mse))
+        plt.ylabel('Mean Squared Error for decision tree')
+        plt.title('Mean Squared Error for Each Data Point')
         # Add legend
         plt.legend()
         # Create the link with the formatted time
-        link_for_mse = f"mean_squared_error{formatted_time}.png"
+        link_for_mse_decision = f"mean_squared_error_{formatted_time}.png"
         # Save the plot as an image file in the uploads directory
-        plt.savefig(os.path.join(UPLOAD_FOLDER, link_for_mse))
+        plt.savefig(os.path.join(UPLOAD_FOLDER, link_for_mse_decision))
 
-        # Calculate residuals
-        residuals = np.array(actual_angles) - np.array(linear_reg_preds)
-        # Create a residual plot
+        print(4)
+        print("randomForest_preds_reg_preds", randomForest_preds_reg_preds)
+        # randomForest_preds_reg_preds = randomForest_preds_reg_preds.astype(
+        #     float)
+        # Create an empty list to store MSE values
+        mse_values_random_forest = []  # Create an empty list to store MSE values
+        for actual_angle, prediction in zip(actual_angles, randomForest_preds_reg_preds):
+            # Calculate MSE for each data point
+            mse = mean_squared_error([actual_angle], [prediction])
+            mse_values_random_forest.append(mse)  # Add MSE value to the list
+
+        print("mse_values_random_forest", mse_values_random_forest)
+        # Create a figure
         plt.figure(figsize=(10, 6))
-        plt.scatter(linear_reg_preds, residuals, color='b', marker='o')
-        plt.axhline(y=0, color='r', linestyle='--')
-        plt.xlabel('Predicted Angles')
-        plt.ylabel('Residuals')
-        plt.title('Residual Plot')
+        # Plot MSE values for each data point
+        plt.plot(range(len(mse_values_random_forest)), mse_values_random_forest,
+                 marker='o', color='g', label='MSE')
+        # Add labels and title
+        plt.xlabel('Data Points')
+        plt.ylabel('Mean Squared Error by random forest')
+        plt.title('Mean Squared Error for Each Data Point')
         # Add legend
         plt.legend()
         # Create the link with the formatted time
-        link_for_residuals = f"link_for_residuals{formatted_time}.png"
+        link_for_mse_random_forest = f"mean_squared_error_random_forest{formatted_time}.png"
         # Save the plot as an image file in the uploads directory
-        plt.savefig(os.path.join(UPLOAD_FOLDER, link_for_residuals))
+        plt.savefig(os.path.join(UPLOAD_FOLDER, link_for_mse_random_forest))
 
+        print(5)
         # Read existing data from the CSV file and update start_angle for the first row
         with open(csv_file_path, mode='r') as file:
             reader = csv.DictReader(file)
@@ -184,4 +213,4 @@ class Models:
                 writer.writerow(
                     [row['angle'], row['timeInMillisec'], row['start_angle'], row["initial_velocity"]])
 
-        return [link, link_for_mse, link_for_residuals]
+        return [link, link_for_mse_decision, link_for_mse_random_forest]

@@ -8,7 +8,7 @@ const PathToLearn = ({ image, heading, about, paragraph }) => {
     <div className={classes.container}>
       <div className={classes.left}>
         <div className={classes.image}>
-          <Image src={image} width={400} height={400} alt="image" />
+          <Image src={image} width={1700} height={500} alt="image" />
         </div>
       </div>
       <div className={classes.right}>
