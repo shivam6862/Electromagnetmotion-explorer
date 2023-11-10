@@ -55,23 +55,23 @@ install all the dependencies
 
 ### Home Page
 
-![Home Logo](./desktop-application/HOME.png)
+![Home Logo](./IMAGE/HOME.png)
 
 ### Working model Page
 
-![Working model Page](./desktop-application/renderer/public/window_complete.png)
+![Working model Page](./IMAGE/window_complete.png)
 
 ### Machine learning actual vs predicted graph
 
-![Machine learning actual vs predicted graph](./machine-learning-models/uploads/actual_vs_predicted_2023-11-10-11-17-33.png)
+![Machine learning actual vs predicted graph](./IMAGE/actual_vs_predicted_2023-11-10-11-17-33.png)
 
 ### mean squared error by Decision Tree
 
-![mean squared error by Decision Tree](./machine-learning-models/uploads/mean_squared_error_random_forest2023-11-10-09-26-11.png)
+![mean squared error by Decision Tree](./IMAGE/mean_squared_error_random_forest2023-11-10-09-26-11.png)
 
 ### mean squared error by RandomForest
 
-![mean squared error by RandomForest](./machine-learning-models/uploads/mean_squared_error_random_forest2023-11-10-11-17-33.png)
+![mean squared error by RandomForest](./IMAGE/mean_squared_error_random_forest2023-11-10-11-17-33.png)
 
 ## Contributing
 
