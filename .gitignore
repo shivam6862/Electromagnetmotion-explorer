@@ -9,7 +9,7 @@ desktop-application/.env
 desktop-application/package-lock.json
 machine-learning-models/env
 machine-learning-models/__pycache__
-machine-learning-models/uploads
+machine-learning-models/.uploads
 
 desktop-application/renderer/component/chart/data.json
 desktop-application/renderer/component/button/seee.json

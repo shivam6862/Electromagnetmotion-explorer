@@ -31,9 +31,9 @@ const usePYModels = () => {
       console.log(error.message);
       NotificationHandler("Error", "Predictions failed to work.", "Error");
       const data = [
-        "actual_vs_predicted_2023-11-10-01-56-49.png",
-        "mean_squared_error_2023-11-10-01-56-49.png",
-        "residuals_2023-11-10-01-56-49.png",
+        "actual_vs_predicted_2023-11-10-11-17-33.png",
+        "mean_squared_error_random_forest2023-11-10-09-26-11.png",
+        "mean_squared_error_random_forest2023-11-10-11-17-33.png",
       ];
       return data;
     }
