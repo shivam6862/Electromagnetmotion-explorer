@@ -29,6 +29,9 @@ const Buttons = ({
   ];
 
   const handleReadCharacter = async () => {
+    if (chartDataState.length > 0) {
+      setPreviousAllChartData((prev) => [...prev, chartDataState]);
+    }
     setChartDataState([]);
     setIsReadButtonActive(false);
     try {
@@ -96,9 +99,6 @@ const Buttons = ({
           response.message,
           response.type
         );
-      if (chartDataState.length > 0) {
-        setPreviousAllChartData((prev) => [...prev, chartDataState]);
-      }
     } catch (error) {
       NotificationHandler(
         "ElectroMagnetMotion Explorer",
