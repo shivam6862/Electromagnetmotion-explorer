@@ -47,8 +47,8 @@ contextBridge.exposeInMainWorld("webSerialApi", {
     try {
       await ipcRenderer.invoke("webusb:requestport");
 
-      const filters = [{ usbVendorId: 6790, usbProductId: 29987 }];
-      port = await navigator.serial.requestPort({ filters });
+      // const filters = [{ usbVendorId: 6790, usbProductId: 29987 }];
+      port = await navigator.serial.requestPort({});
       const portInfo = port.getInfo();
       await port.open({ baudRate: 9600 });
       textDecoder = new TextDecoderStream();

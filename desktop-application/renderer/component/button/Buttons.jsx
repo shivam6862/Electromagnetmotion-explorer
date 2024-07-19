@@ -9,7 +9,12 @@ import usePYModels from "../../hook/usePYModels";
 
 let interval;
 
-const Buttons = ({ chartDataState, setChartDataState, setPythonURLImage }) => {
+const Buttons = ({
+  chartDataState,
+  setChartDataState,
+  setPythonURLImage,
+  setPreviousAllChartData,
+}) => {
   const { generateImage } = usePYModels();
   const { NotificationHandler } = useNotification();
   const [readCharacter, setReadCharacter] = useState("R");
@@ -91,6 +96,9 @@ const Buttons = ({ chartDataState, setChartDataState, setPythonURLImage }) => {
           response.message,
           response.type
         );
+      if (chartDataState.length > 0) {
+        setPreviousAllChartData((prev) => [...prev, chartDataState]);
+      }
     } catch (error) {
       NotificationHandler(
         "ElectroMagnetMotion Explorer",

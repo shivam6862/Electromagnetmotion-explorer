@@ -11,6 +11,7 @@ import { PiPlugsConnectedBold } from "react-icons/pi";
 const Home = () => {
   const arduinoCtx = useContext(ArduinoContext);
   const [chartDataState, setChartDataState] = useState([]);
+  const [previousAllChartData, setPreviousAllChartData] = useState([]);
   const [pythonURLImage, setPythonURLImage] = useState([
     "actual_vs_predicted_2023-11-10-11-17-33.png",
     "mean_squared_error_random_forest2023-11-10-09-26-11.png",
@@ -34,10 +35,13 @@ const Home = () => {
           chartDataState={chartDataState}
           setChartDataState={setChartDataState}
           setPythonURLImage={setPythonURLImage}
+          setPreviousAllChartData={setPreviousAllChartData}
         />
         <div className={classes.line_chart}>
           <LineChart chartDataState={chartDataState} />
-          <LineChart chartDataState={chartDataState} />
+          {previousAllChartData.map((item, index) => (
+            <LineChart chartDataState={item} key={index} />
+          ))}
         </div>
         <div className={classes.images_from_ml}>
           {pythonURLImage.map((item, index) => (
